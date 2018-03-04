@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">BeneFITS</string>
     <string name="title_activity_login">Sign in</string>
-
+    <string name="krumbssdk_app_id">KnSNN0GjvSt8QcCsCJmQXUIEmBZXZUeXp_u1powW4ec=</string>
+    <string name="krumbssdk_client_key">C68-DJlswta0avPerErwWD-ARi5gJ9voFiYhxJoGefE=</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
