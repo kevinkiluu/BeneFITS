@@ -47,7 +47,7 @@ import java.util.List;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
-
+import com.google.firebase.*;
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         registerButton = (Button) findViewById(R.id.register_button);
 
         // Getting the firebase reference url
-        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         registerButton.setOnClickListener(new View.OnClickListener(){
             @Override
