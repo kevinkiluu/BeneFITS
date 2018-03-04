@@ -18,9 +18,34 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
+        def krumbs_artifactory = artifactory_host_url
+        def krumbs_username = artifactory_username
+        def krumbs_password = artifactory_password
+        maven { url ("$artifactory_host_url/libs-release-local")
+            credentials {
+                username ("$krumbs_username")
+                password ("$krumbs_password")
+            }
+        }
+        maven { url ("$artifactory_host_url/libs-snapshot-local")
+            credentials {
+                username ("$krumbs_username")
+                password ("$krumbs_password")
+            }
+        }
+        google()
     }
+}
+
+ext {
+    compileSdkVersion = 26
+    buildToolsVersion = "26.0.2"
+    minSdkVersion = 16
+    targetSdkVersion = 26
 }
 
 task clean(type: Delete) {
