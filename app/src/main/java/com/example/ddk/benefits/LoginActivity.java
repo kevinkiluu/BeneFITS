@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     protected EditText passwordEditText;
     protected Button loginButton;
     protected TextView signUpTextView;
+    protected Button registerButton;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -77,12 +78,43 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = (EditText) findViewById(R.id.email);
         passwordEditText = (EditText) findViewById(R.id.password);
         loginButton = (Button) findViewById(R.id.email_sign_in_button);
-
+        registerButton = (Button) findViewById(R.id.register_button);
 
         // Getting the firebase reference url
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+        registerButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View V){
+                // Reterives user inputs
+                email = emailEditText.getText().toString();
+                password = passwordEditText.getText().toString();
 
+                // trims the input
+                email = email.trim();
+                password = password.trim();
+
+
+                mAuth.createUserWithEmailAndPassword(email,password)
+                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                Log.d("TAG", "createUserWithEmailAndPassword:onComplete:" + task.isSuccessful());
+
+                                // If sign in fails, display a message to the user. If sign in succeeds
+                                // the auth state listener will be notified and logic to handle the
+                                // signed in user can be handled in the listener.
+                                if (!task.isSuccessful()) {
+                                    Log.w("TAG", "createUserWithEmailAndPassword", task.getException());
+                                    Toast.makeText(LoginActivity.this, "User Account Creation failed.",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+
+
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
