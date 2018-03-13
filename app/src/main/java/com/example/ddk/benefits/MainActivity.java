@@ -71,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
                     mAuth.signOut();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
+                } else if (itemId == R.id.logfood) {
+                    //startActivity(new Intent(MainActivity.this, DiaryActivity.class));
+                } else if (itemId == R.id.logexercise) {
+
+                } else if (itemId == R.id.usersettings) {
+
+                } else if (itemId == R.id.homepage) {
+                    drawerLayout.closeDrawers();
                 }
 
                 if (f != null) {
@@ -97,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             // manage other entries if you have it ...
+
         }
 
         return true;
