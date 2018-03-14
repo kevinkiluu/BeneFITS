@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                 } else if (itemId == R.id.logfood) {
-                    //startActivity(new Intent(MainActivity.this, DiaryActivity.class));
+                    startActivity(new Intent(MainActivity.this, DiaryActivity.class));
                 } else if (itemId == R.id.logexercise) {
 
                 } else if (itemId == R.id.usersettings) {
@@ -83,9 +83,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if (f != null) {
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.frame, f);
-                    transaction.commit();
                     drawerLayout.closeDrawers();
+                    transaction.replace(R.id.frame, f);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                     return true;
                 }
 
