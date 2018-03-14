@@ -1,5 +1,6 @@
 package com.example.ddk.benefits;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -41,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         layout = (RelativeLayout) findViewById(R.id.layout);
         configureNavigationDrawer();
         configureToolbar();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame, new HomeFragment());
+        transaction.commit();
     }
 
     @Override
@@ -72,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
                 } else if (itemId == R.id.logfood) {
-                    //startActivity(new Intent(MainActivity.this, DiaryActivity.class));
+                    f = new DiaryFragment();
                 } else if (itemId == R.id.logexercise) {
 
                 } else if (itemId == R.id.usersettings) {
 
                 } else if (itemId == R.id.homepage) {
-                    drawerLayout.closeDrawers();
+                    f = new HomeFragment();
                 }
 
                 if (f != null) {
