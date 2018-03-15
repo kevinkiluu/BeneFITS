@@ -83,6 +83,15 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
 
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, Registration.class);
+                startActivity(intent);
+            }
+
+        });
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +144,15 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference ref = database.getReference("server/BeneFITS");
+                    DatabaseReference usersRef = ref.child("users");
+
+                    DatabaseReference uN = database.getReference("user_name");
+                    DatabaseReference pW = database.getReference("password");
+
+                    uN.setValue(email);
+                    pW.setValue(password);
                     startActivity(intent);
 
                 } else {
