@@ -108,9 +108,15 @@ public class DiaryFragment extends Fragment {
                 }
 
                 if (text != null) {
-                    foodId = ndbnoList.get((int)arg3);
-                    //Fragment f = new FoodFragment();
-                    //fragment setup...
+                    Bundle args = new Bundle();
+                    args.putString("food", text);
+                    args.putInt("ndbno", ndbnoList.get((int)arg3));
+                    Fragment f = new FoodFragment();
+                    f.setArguments(args);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.frame, f);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
 
                 Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT);
