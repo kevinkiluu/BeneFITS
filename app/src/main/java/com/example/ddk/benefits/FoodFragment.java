@@ -27,9 +27,16 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class HomeFragment extends Fragment {
+public class FoodFragment extends Fragment {
     private RelativeLayout layout;
     private DrawerLayout drawerLayout;
+    private String foodName;
+    private int ndbNumber;
+
+//    public FoodFragment(String food, int ndbno) {
+//        foodName = food;
+//        ndbNumber = ndbno;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
