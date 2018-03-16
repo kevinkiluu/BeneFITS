@@ -53,6 +53,7 @@ public class DiaryFragment extends Fragment {
     private ArrayAdapter<String> mAdapter;
     private List<String> itemList;
     private List<Integer> ndbnoList;
+    private RetrieveFeedTask query;
 
     protected ProgressBar progressBar;
     protected ListView responseView;
@@ -91,8 +92,8 @@ public class DiaryFragment extends Fragment {
         view.findViewById(R.id.search_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RetrieveFeedTask query = new RetrieveFeedTask();
-                query.execute();
+                query = new RetrieveFeedTask();
+                query.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 

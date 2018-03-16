@@ -69,8 +69,6 @@ public class FoodFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         info = getArguments();
-        foodId = info.getString("food");
-        ndbNumber = info.getInt("ndbno");
     }
 
     @Nullable
@@ -84,6 +82,8 @@ public class FoodFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        foodId = info.getString("food");
+        ndbNumber = info.getInt("ndbno");
         foodName = (TextView) getView().findViewById(R.id.foodName);
         foodName.setText(foodId);
         calorie_count = (TextView) getView().findViewById(R.id.calorie_count);
@@ -102,6 +102,9 @@ public class FoodFragment extends Fragment {
         listAdapter = new ArrayAdapter<String>(getActivity(), R.layout.item_results, listDataHeader);
         foodMeasure.setAdapter(listAdapter);
 
+        RetrieveFoodInfo query = new RetrieveFoodInfo();
+        query.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
         foodMeasure.setClickable(true);
         foodMeasure.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,20 +122,34 @@ public class FoodFragment extends Fragment {
                 }
             }
         });
+
+        view.findViewById(R.id.addFood).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: subtract from user's daily macros
+                Bundle args = new Bundle();
+                getActivity().getSupportFragmentManager().popBackStack();
+                //transaction.commit();
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Added food", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
     }
 
-    class RetrieveFeedTask extends AsyncTask<Void, Void, String> {
+    class RetrieveFoodInfo extends AsyncTask<Void, Void, String> {
         private Exception exception;
 
+        @Override
         protected void onPreExecute() {
 
         }
 
+        @Override
         protected String doInBackground(Void... urls) {
             // Do some validation here
-            //https://api.nal.usda.gov/ndb/reports/V2?ndbno=01009&ndbno=01009&ndbno=45202763&ndbno=35193&type=b&format=json&api_key=DEMO_KEY
+            //https://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=O0np9WbTWxzKDzJPhWBAiU6NMh3NWH4J8jDv3qB3&nutrients=205&nutrients=204&nutrients=208&nutrients=203&ndbno=01009
             try {
-                URL url = new URL("https://api.nal.usda.gov/ndb/reports/V2?ndbno=" + ndbNumber + "&format=json&api_key=" + "O0np9WbTWxzKDzJPhWBAiU6NMh3NWH4J8jDv3qB3");
+                URL url = new URL("https://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=O0np9WbTWxzKDzJPhWBAiU6NMh3NWH4J8jDv3qB3&nutrients=205&nutrients=204&nutrients=208&nutrients=203&ndbno=" + ndbNumber);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 try {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -154,60 +171,42 @@ public class FoodFragment extends Fragment {
             }
         }
 
+        @Override
         protected void onPostExecute(String response) {
             if(response == null) {
                 response = "THERE WAS AN ERROR";
             }
-
+            Log.w("INFO", response);
             try {
                 ArrayList<JSONObject> convertedItems = new ArrayList<JSONObject>();
                 JSONObject object = new JSONObject(response);
-                JSONArray list = object.getJSONArray("foods");
-                JSONArray elmts = list.getJSONArray(0); // "nutrients"
-                //listDataHeader.clear();
-                //listAdapter.clear();
+                JSONObject report = object.getJSONObject("report");
+                JSONArray foods = report.getJSONArray("foods");
+                JSONArray nutrients = foods.getJSONObject(0).getJSONArray("nutrients"); // "nutrients"
+                listDataHeader.clear();
+                listAdapter.clear();
 
-                JSONObject first = elmts.getJSONObject(0);
-                JSONArray measures = first.getJSONArray("measures");
-                for (int i = 0; i < measures.length(); i++) {
-                    JSONObject nextMeasure = measures.getJSONObject(i);
-                    listDataHeader.add(nextMeasure.getString("label"));
-                }
-
+                String measures = foods.getJSONObject(0).getString("measure");
+                listDataHeader.add(measures);
                 listAdapter.notifyDataSetChanged();
 
-                for (int i = 0; i < elmts.length(); i++) {
-                    JSONObject nextElmt = elmts.getJSONObject(i);
-                    JSONArray nextMeasure = nextElmt.getJSONArray("measures");
+                for (int i = 0; i < nutrients.length(); i++) {
+                    JSONObject nextElmt = nutrients.getJSONObject(i);
                     if (nextElmt.getInt("nutrient_id") == 208) { //kcal
-                        for (int j = 0; j < nextMeasure.length(); j++) {
-                            JSONObject measureElmt = nextMeasure.getJSONObject(j);
-                            calorieList.add(measureElmt.getInt("value"));
-                        }
+                        calorieList.add(nextElmt.getInt("value"));
                     } else if (nextElmt.getInt("nutrient_id") == 204) { //fat
-                        for (int j = 0; j < nextMeasure.length(); j++) {
-                            JSONObject measureElmt = nextMeasure.getJSONObject(j);
-                            fatList.add(measureElmt.getDouble("value"));
-                        }
+                        fatList.add(nextElmt.getDouble("value"));
                     } else if (nextElmt.getInt("nutrient_id") == 205) { //carbs
-                        for (int j = 0; j < nextMeasure.length(); j++) {
-                            JSONObject measureElmt = nextMeasure.getJSONObject(j);
-                            carbList.add(measureElmt.getDouble("value"));
-                        }
+                        carbList.add(nextElmt.getDouble("value"));
                     } else if (nextElmt.getInt("nutrient_id") == 203) { //protein
-                        for (int j = 0; j < nextMeasure.length(); j++) {
-                            JSONObject measureElmt = nextMeasure.getJSONObject(j);
-                            proteinList.add(measureElmt.getDouble("value"));
-                        }
-                    } else if (nextElmt.getInt("nutrient_id") == 291) {
-                        break;
+                        proteinList.add(nextElmt.getDouble("value"));
                     }
                 }
 
                 calorie_count.setText(Integer.toString(calorieList.get(0)));
-                fat_count.setText(Double.toString(fatList.get(0)));
-                carb_count.setText(Double.toString(carbList.get(0)));
-                protein_count.setText(Double.toString(proteinList.get(0)));
+                fat_count.setText(Double.toString(fatList.get(0)) + "g");
+                carb_count.setText(Double.toString(carbList.get(0)) + "g");
+                protein_count.setText(Double.toString(proteinList.get(0)) + "g");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
