@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.logexercise) {
 
                 } else if (itemId == R.id.usersettings) {
-
+                    f = new SettingsFragment();
                 } else if (itemId == R.id.homepage) {
                     f = new HomeFragment();
                 } else if (itemId == R.id.map) {
