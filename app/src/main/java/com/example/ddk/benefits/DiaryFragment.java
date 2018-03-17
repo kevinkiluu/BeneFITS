@@ -53,6 +53,7 @@ public class DiaryFragment extends Fragment {
     private ArrayAdapter<String> mAdapter;
     private List<String> itemList;
     private List<Integer> ndbnoList;
+    private RetrieveFeedTask query;
 
     protected ProgressBar progressBar;
     protected ListView responseView;
@@ -91,8 +92,8 @@ public class DiaryFragment extends Fragment {
         view.findViewById(R.id.search_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RetrieveFeedTask query = new RetrieveFeedTask();
-                query.execute();
+                query = new RetrieveFeedTask();
+                query.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
@@ -108,9 +109,15 @@ public class DiaryFragment extends Fragment {
                 }
 
                 if (text != null) {
-                    foodId = ndbnoList.get((int)arg3);
-                    //Fragment f = new FoodFragment();
-                    //fragment setup...
+                    Bundle args = new Bundle();
+                    args.putString("food", text);
+                    args.putInt("ndbno", ndbnoList.get((int)arg3));
+                    Fragment f = new FoodFragment();
+                    f.setArguments(args);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.frame, f);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
 
                 Toast toast = Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT);
