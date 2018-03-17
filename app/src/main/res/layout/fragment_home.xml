@@ -5,11 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="26dp"
-        android:text="Welcome to beneFITS!"
-        tools:layout_editor_absoluteX="122dp"
-        tools:layout_editor_absoluteY="270dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="fill_parent"
+            android:layout_height="26dp"
+            android:text="Welcome to beneFITS!"
+            android:textAlignment="center"
+            tools:layout_gravity="center" />
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
