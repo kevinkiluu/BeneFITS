@@ -12,12 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <!--<fragment android:name="com.example.ddk.benefits.DiaryActivity"-->
-            <!--android:id="@+id/logfood"-->
-            <!--android:layout_weight="1"-->
-            <!--android:layout_width="24dp"-->
-            <!--android:layout_height="match_parent" />-->
-
         <include layout="@layout/activity_drawer" />
 
         <!-- For fragments -->
@@ -34,6 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/nav_items" />
+        app:menu="@menu/nav_items"
+        app:headerLayout="@layout/nav_header"/>
 
 </android.support.v4.widget.DrawerLayout>

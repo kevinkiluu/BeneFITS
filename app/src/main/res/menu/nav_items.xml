@@ -3,19 +3,23 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/homepage"
             android:title="Home"
-            android:icon="@drawable/ic_logout" />
+            android:icon="@drawable/ic_home" />
 
         <item android:id="@+id/logfood"
             android:title="Log Food Entry"
-            android:icon="@drawable/ic_logout" />
+            android:icon="@drawable/ic_food" />
 
         <item android:id="@+id/logexercise"
             android:title="Log Exercise Entry"
-            android:icon="@drawable/ic_logout" />
+            android:icon="@drawable/ic_exercise" />
+
+        <item android:id="@+id/map"
+            android:title="What's Nearby"
+            android:icon="@drawable/ic_map" />
 
         <item android:id="@+id/usersettings"
             android:title="Settings"
-            android:icon="@drawable/ic_logout" />
+            android:icon="@drawable/ic_settings" />
 
         <item android:id="@+id/logout"
             android:title="Logout"

@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (itemId == R.id.homepage) {
                     f = new HomeFragment();
+                } else if (itemId == R.id.map) {
+                    f = new MapFragment();
                 }
 
                 if (f != null) {
