@@ -27,9 +27,17 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
+
 public class HomeFragment extends Fragment {
     private RelativeLayout layout;
     private DrawerLayout drawerLayout;
+    private SimpleDateFormat dateFormat;
+
+    private TextView todayView;
+    private Button logButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,5 +55,23 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        todayView = getView().findViewById(R.id.todayView);
+        logButton = getView().findViewById(R.id.logButton);
+
+        dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Date todayDate = new Date();
+        String dateView = dateFormat.format(todayDate);
+        todayView.setText(dateView);
+
+        view.findViewById(R.id.logButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment f = new DiaryFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame, f);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 }
