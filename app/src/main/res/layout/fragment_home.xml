@@ -168,7 +168,7 @@
     <LinearLayout
         android:id="@+id/RecommendationView"
         android:layout_width="match_parent"
-        android:layout_height="205dp"
+        android:layout_height="65dp"
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/CalorieDetailView">
@@ -188,6 +188,8 @@
             android:id="@+id/noRecs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingLeft="75dp"
+            android:paddingTop="10dp"
             android:text="You have no new recommendations." />
 
         <ListView
@@ -201,38 +203,82 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/FoodDiaryView"
+    <RelativeLayout
+        android:id="@+id/WeatherView"
         android:layout_width="match_parent"
-        android:layout_height="205dp"
+        android:layout_height="349dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/RecommendationView"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/RecommendationView">
 
         <TextView
-            android:id="@+id/diaryTextView"
+            android:id="@+id/weatherHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimaryDark"
             android:paddingLeft="3dp"
-            android:text="FOOD LOG"
+            android:text="CURRENT WEATHER"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/noLog"
-            android:layout_width="match_parent"
+            android:id="@+id/weather_icon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="You haven't logged any food entries today." />
+            android:paddingTop="4dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/weatherHeader"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="70sp" />
 
-        <ListView
-            android:id="@+id/foodLogList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:dividerHeight="1dp"
-            android:footerDividersEnabled="true"
-            android:headerDividersEnabled="true"
-            android:visibility="gone" />
-    </LinearLayout>
+        <TextView
+            android:id="@+id/details_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/weather_icon"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/current_temperature_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:layout_below="@+id/details_field"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/city_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/current_temperature_field"
+            android:paddingTop="10dp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/updated_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/city_field"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="13sp" />
+
+
+
+
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
