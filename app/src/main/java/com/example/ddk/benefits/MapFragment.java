@@ -39,13 +39,15 @@ import java.util.concurrent.TimeUnit;
 public class MapFragment extends Fragment implements OnMapReadyCallback, LocationListener{
 
     LocationManager locationManager;
+    Location last_location;
 
     SupportMapFragment mapFrag;
     GoogleMap mMap;
-    MarkerOptions currentLocation;
-    double latitude;
-    double longitude;
-    LatLng curloc;
+    public MarkerOptions currentLocation;
+    public double latitude;
+    public double longitude;
+    public LatLng curloc = new LatLng(0,0);
+    boolean hasNotSearched = true;
 
     int PROXIMITY_RADIUS = 5093;
 
@@ -60,7 +62,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map, null);
@@ -95,8 +96,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
         public void onClick(final View v) {
             Object dataTransfer[] = new Object[2];
             GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
-
-
+            hasNotSearched = false;
             switch (v.getId()) {
                 case R.id.B_gyms:
                     mMap.clear();
@@ -107,7 +107,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                     getNearbyPlacesData.execute(dataTransfer);
                     Toast.makeText(getActivity(), "Showing Nearby Gyms", Toast.LENGTH_SHORT).show();
 
-                    mMap.addMarker(currentLocation);
                     break;
 
 
@@ -120,7 +119,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                     getNearbyPlacesData.execute(dataTransfer);
                     Toast.makeText(getActivity(), "Showing Nearby Parks", Toast.LENGTH_SHORT).show();
 
-                    mMap.addMarker(currentLocation);
                     break;
 
                 case R.id.B_trails:
@@ -132,18 +130,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                     getNearbyPlacesData.execute(dataTransfer);
                     Toast.makeText(getActivity(), "Showing Nearby Trails", Toast.LENGTH_SHORT).show();
 
-                    mMap.addMarker(currentLocation);
                     break;
 
             }
-
+            addMapRipple();
         }
     };
 
     void getLocation() {
         try {
             locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 5, this);
         }
         catch(SecurityException e) {
             e.printStackTrace();
@@ -161,32 +158,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        getLocation();
 
-        // Add a marker in current Location
-        mapRipple = new MapRipple(mMap, new LatLng(33.6404952, -117.8442962), getContext());
+    }
 
+    private void addMapRipple(){
+        mapRipple = new MapRipple(mMap, curloc, getContext());
         mapRipple.withNumberOfRipples(3);
         mapRipple.withFillColor(android.graphics.Color.argb(80, 255, 100, 100));
         mapRipple.withStrokeColor(Color.RED);
         mapRipple.withStrokewidth(2);
-        mapRipple.withDistance(200);
+        mapRipple.withDistance(500);
         mapRipple.withRippleDuration(4000);
         mapRipple.withDurationBetweenTwoRipples(7000);
-
-        getLocation();
-        curloc = new LatLng(latitude, longitude);
-        currentLocation = new MarkerOptions()
-                                        .position(curloc)
-                                        .title("Current Location");
-        currentLocation.icon(BitmapDescriptorFactory.fromResource(R.drawable.cur_loc));
         mapRipple.withLatLng(curloc);
         mapRipple.startRippleMapAnimation();
-        //mMap.setOnMarkerClickListener(this);
-
-        mMap.addMarker(currentLocation);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(curloc));
-        mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
-
     }
 
 
@@ -210,15 +196,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     @Override
     public void onLocationChanged(Location location) {
+
         latitude = location.getLatitude();
         longitude = location.getLongitude();
-        mMap.clear();
         curloc = new LatLng(latitude, longitude);
-        currentLocation.position(curloc);
+        currentLocation = new MarkerOptions()
+                .position(curloc)
+                .title("Current Location");
+        currentLocation.icon(BitmapDescriptorFactory.fromResource(R.drawable.cur_loc));
         mMap.addMarker(currentLocation);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(curloc));
-        mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
-        mapRipple.withLatLng(curloc);
+        if(hasNotSearched) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(curloc));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+            addMapRipple();
+        }
+        try {
+            Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }catch(Exception e)
+        {
+
+        }
+
+
+
 
     }
 

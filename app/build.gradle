@@ -22,7 +22,6 @@ android {
     }
 }
 
-
 dependencies {
     implementation 'com.github.aarsy.googlemapsanimations:googlemapsanimations:1.0.5'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
