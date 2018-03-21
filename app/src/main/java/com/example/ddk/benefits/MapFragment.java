@@ -133,6 +133,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                     break;
 
             }
+            mMap.addMarker(currentLocation);
             addMapRipple();
         }
     };
@@ -164,13 +165,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     private void addMapRipple(){
         mapRipple = new MapRipple(mMap, curloc, getContext());
-        mapRipple.withNumberOfRipples(3);
+        mapRipple.withNumberOfRipples(1);
         mapRipple.withFillColor(android.graphics.Color.argb(80, 255, 100, 100));
         mapRipple.withStrokeColor(Color.RED);
         mapRipple.withStrokewidth(2);
         mapRipple.withDistance(500);
-        mapRipple.withRippleDuration(4000);
-        mapRipple.withDurationBetweenTwoRipples(7000);
+        mapRipple.withRippleDuration(2500);
         mapRipple.withLatLng(curloc);
         mapRipple.startRippleMapAnimation();
     }
@@ -204,8 +204,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
                 .position(curloc)
                 .title("Current Location");
         currentLocation.icon(BitmapDescriptorFactory.fromResource(R.drawable.cur_loc));
-        mMap.addMarker(currentLocation);
+
         if(hasNotSearched) {
+            mMap.addMarker(currentLocation);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(curloc));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
             addMapRipple();
