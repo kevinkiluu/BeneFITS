@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.arsy.maps_library.MapRipple;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -163,14 +163,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, Locatio
 
     }
 
-    private void addMapRipple(){
-        mapRipple = new MapRipple(mMap, curloc, getContext());
-        mapRipple.withNumberOfRipples(1);
-        mapRipple.withFillColor(android.graphics.Color.argb(80, 255, 100, 100));
+    private void addMapRipple() {
+        if (mapRipple != null){
+            mapRipple.stopRippleMapAnimation();
+        mapRipple = null;
+        }
+        mapRipple = new MapRipple(mMap, curloc, getContext(),
+                android.graphics.Color.argb(140, 255, 100, 100), 1000, 0 );
+        mapRipple.withNumberOfRipples(2);
         mapRipple.withStrokeColor(Color.RED);
-        mapRipple.withStrokewidth(2);
-        mapRipple.withDistance(500);
-        mapRipple.withRippleDuration(2500);
+        mapRipple.withRippleDuration(3500);
+        mapRipple.withDurationBetweenTwoRipples(1500);
         mapRipple.withLatLng(curloc);
         mapRipple.startRippleMapAnimation();
     }
